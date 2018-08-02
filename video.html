@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+<script type="text/javascript" src="check_cookie.php"></script>
+
+<script type="text/javascript">
+function createPlayer()
+{
+  var x = document.createElement("VIDEO");
+  x.setAttribute("id", "myPlayer");
+  x.setAttribute("width", "640");
+  x.setAttribute("height", "480");
+  x.setAttribute("controls", "controls");
+  x.setAttribute("src", "movie.mp4");
+  document.body.appendChild(x);
+}
+
+createPlayer();
+</script>
+
+<script type="text/javascript">
+	var c = document.cookie.split(';');
+	for(var i=0; i<c.length; i++)
+	{
+		if(c[i].split('=')[0] == "user_id")
+		{
+			var user_id = c[i].split('=')[1];
+		}
+	}
+
+	var timer = window.setInterval(getTime,5000);
+	function getTime()
+	{
+  		var x = document.getElementById("myPlayer");
+  		var s = x.currentTime;
+  		var t;
+  		if(s > -1){
+    		var hour = Math.floor(s/3600);
+    		var min = Math.floor(s/60) % 60;
+    		var sec = parseInt(s % 60);
+		    if(hour < 10) {
+        		t = '0'+ hour + ":";
+		    } else {
+        		t = hour + ":";
+		}
+
+	   	if(min < 10){t += "0";}
+    	t += min + ":";
+	    if(sec < 10){t += "0";}
+    	t += sec;
+  	}
+
+	if (window.XMLHttpRequest)
+	{
+	    xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{    
+	    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.open("GET","write_process.php?p=" + t + "&user_id=" + user_id,true);
+	xmlhttp.send();
+}
+</script>
+
+</body>
+</html>
