@@ -1,33 +1,47 @@
-<html>
-<head>
-<meta charset="utf-8">
-<title>SDN创新应用大赛演示系统登录</title>
-</head>
-<body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>SDN创新应用大赛演示系统登录</title>
 
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='mycss/login.css'>
+  </head>
+<!--
+  <body>
+    <p class="greeting">请登录</p>
+    <form action="login.php" method="post">
+      <span class="user_id">用户名: </span>
+      <input type="text" name="user_id">
+      <br>
+      </br>
+      <span class="password">密码: </span>
+      <input type="password" name="password">
+      <input type="submit" value="提交">
+      <input type="reset" value="重置">
+    </form>
+  </body>
+-->
+  <body>
 
-<p class="greeting">请登录</p>
-<form action="login.php" method="post">
-	<span class="user_id">用户名: </span>
-	<input type="text" name="user_id">
-	<br>
-	</br>
-	<span class="password">密码: </span>
-	<input type="password" name="password">
-	<br>
-	</br>
-	<span class="cookie">Cookie保存时间：</span>
-	<select name="cookie" id="cookie">
-		<option value="0" selected>浏览器进程</option>
-		<option value="1" selected>保存1天</option>
-		<option value="2" selected>保存30天</option>
-		<option value="3" selected>保存365天</option>
-	</select>
-	<br>
-	</br>
-<input type="submit" value="提交">
-<input type="reset" value="重置">
-</form>
+    <div class="container">
+
+      <form class="form-signin" action="login.php" method="post">
+        <h2 class="form-signin-heading">SDN创新大赛演示系统</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="text" id="inputEmail" class="form-control" placeholder="Username" name="user_id">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+
+    </div> <!-- /container -->
  
-</body>
+  </body>
 </html>

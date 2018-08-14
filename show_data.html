@@ -1,0 +1,55 @@
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>用户状态监控</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="mycss/show_data.css" rel="stylesheet">
+    <script src="bootstrap/js/jquery-2.1.4.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>当前服务状态</h2>
+      <table class="table table-hover"><tr><th>id</th><th>password</th><th>server</th><th>time</th></tr>
+        <tbody id="tbody-result">
+        </tbody>
+      </table>
+      <!--页面自动刷新 -->
+      <script type="text/javascript">
+      var timer = window.setInterval(fresh_page,5000);
+        function fresh_page()   
+        {
+          var tbody=document.getElementById("tbody-result");
+          $.ajax({
+            type: "post",
+            dataType: "json",
+            url: "get_data.php",
+            data: {
+                username: "username",
+                password: "password",
+                server: "server",
+                video_process: "video_process"
+            },
+            success: function (msg) {
+                    var str = "";
+ 		    var data = msg;
+                    for (i in data) {
+                        str += "<tr>" +
+                        "<td>" + data[i].username + "</td>" +
+                        "<td>" + data[i].password + "</td>" +
+                        "<td>" + data[i].server + "</td>" +
+                        "<td>" + data[i].video_process + "</td>" +
+                        "</tr>";
+                    }
+                    tbody.innerHTML = str;
+            },
+            error: function () {
+                alert("查询失败")
+            }
+          }) //ajax
+        }
+	fresh_page();
+      </script>
+    </div>
+</html>
+

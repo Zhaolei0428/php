@@ -1,0 +1,16 @@
+body {
+  min-height: 2000px;
+}
+.content {
+  padding: 40px 15px;
+  text-align: center;
+  font-size: 2em;
+}
+
+.navbar-static-top {
+  margin-bottom: 19px;
+}
+li {
+  font-size: 1.2em;
+}
+

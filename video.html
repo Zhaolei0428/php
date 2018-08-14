@@ -1,9 +1,18 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Video</title>
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="mycss/video.css" rel="stylesheet">
+</head>
 <body>
 
 <script type="text/javascript" src="check_cookie.php"></script>
 
+<div class="container">
+<div>
+<!--
 <script type="text/javascript">
 function createPlayer()
 {
@@ -15,20 +24,14 @@ function createPlayer()
   x.setAttribute("src", "movie.mp4");
   document.body.appendChild(x);
 }
-
 createPlayer();
 </script>
+-->
+<video id="myPlayer" width="800" height="600" controls="controls" src="movie.mp4"></video>
+</div>
+</div>
 
 <script type="text/javascript">
-	var c = document.cookie.split(';');
-	for(var i=0; i<c.length; i++)
-	{
-		if(c[i].split('=')[0] == "user_id")
-		{
-			var user_id = c[i].split('=')[1];
-		}
-	}
-
 	var timer = window.setInterval(getTime,5000);
 	function getTime()
 	{
@@ -59,7 +62,7 @@ createPlayer();
 	{    
 	    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	xmlhttp.open("GET","write_process.php?p=" + t + "&user_id=" + user_id,true);
+	xmlhttp.open("GET","write_process.php?p=" + t,true);
 	xmlhttp.send();
 }
 </script>

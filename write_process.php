@@ -1,6 +1,6 @@
 <?php
 $p=$_GET["p"];
-$username=$_GET["user_id"];
+$username=$_COOKIE["user_id"];
 
 
 $conn = mysqli_connect("localhost", "root", "940428");

@@ -1,5 +1,5 @@
 <?php
-	session_start();
+	//session_start();
 
 	//若cookie存在，无操作；否则跳转报错
 	if(isset($_COOKIE['user_id']))
