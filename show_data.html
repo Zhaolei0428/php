@@ -2,24 +2,52 @@
   <head>
     <meta charset="utf-8">
     <title>用户状态监控</title>
+<!--
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="mycss/show_data.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
     <script src="bootstrap/js/jquery-2.1.4.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+-->
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="bootstrap/js/jquery-2.1.4.min.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <link href="mycss/show_data.css" rel="stylesheet">
   </head>
 
-  <body>
+  <body onload="fresh_page()">
     <div class="container">
-      <h2>当前服务状态</h2>
-      <table class="table table-hover"><tr><th>id</th><th>password</th><th>server</th><th>time</th></tr>
-        <tbody id="tbody-result">
+      <h2 style="color: red">当前用户状态</h2>
+      <table class="table table-hover"><tr><th>user_id</th><th>password</th><th>server</th><th>time</th></tr>
+        <tbody id="user_tbody">
         </tbody>
       </table>
+      <h2 style="color: blue">当前服务器状态</h2>
+      <table class="table table-hover"><tr><th>server_name</th><th>server_status</th><th>server_ip</th></tr>
+        <tbody id="server_tbody">
+        </tbody>
+      </table>
+
+      <div class="server" id="server">
+      </div>
+      </div>
+<!-- 按钮触发模态框
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+	开始演示模态框
+</button>
+模态框（Modal）
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<img src="pictures/loading.gif" width="1000" height="800">
+</div>
+-->
       <!--页面自动刷新 -->
       <script type="text/javascript">
-      var timer = window.setInterval(fresh_page,5000);
+        var timer = window.setInterval(fresh_page,5000);
         function fresh_page()   
         {
-          var tbody=document.getElementById("tbody-result");
+          var user_tbody=document.getElementById("user_tbody");
+	  var server_tbody=document.getElementById("server_tbody");
+	  var server_div=document.getElementById("server");
           $.ajax({
             type: "post",
             dataType: "json",
@@ -31,25 +59,110 @@
                 video_process: "video_process"
             },
             success: function (msg) {
-                    var str = "";
- 		    var data = msg;
-                    for (i in data) {
-                        str += "<tr>" +
-                        "<td>" + data[i].username + "</td>" +
-                        "<td>" + data[i].password + "</td>" +
-                        "<td>" + data[i].server + "</td>" +
-                        "<td>" + data[i].video_process + "</td>" +
+                    var user_str = "";
+ 		    var user_data = msg.user_data;
+                    for (i in user_data) {
+                        user_str += "<tr>" +
+                        "<td>" + user_data[i].username + "</td>" +
+                        "<td>" + user_data[i].password + "</td>" +
+                        "<td>" + user_data[i].server + "</td>" +
+                        "<td>" + user_data[i].video_process + "</td>" +
                         "</tr>";
                     }
-                    tbody.innerHTML = str;
+                    user_tbody.innerHTML = user_str;
+                    var server_data = msg.server_data;
+		    var server_str = "";
+		    var img_str = "";
+	            if(server_data[0].server_status == "off" && server_data[1].server_status == "off")
+		    {
+		            for (i in server_data) {
+		                server_str += "<tr>" +
+		                "<td>" + server_data[i].server_name + "</td>" +
+		                "<td>" + server_data[i].server_status + "</td>" +
+		                "<td>" + server_data[i].ip + "</td>" +
+		                "</tr>";
+				img_str +="<div class='server_block'>" + 
+				"<img src='pictures/server.png' id=\'img" + i + "\'/>" + 
+				"<p>" + server_data[i].server_name + "</p>";
+		                img_str += "<button class=\" btn btn-lg btn-primary btn-block \" onclick=\" change(\'" + "start" + "\',\'" + server_data[i].ip + "\',\'" + server_data[i].username + "\',\'" + server_data[i].password + "\',\'" + "img" + i + "\')\" >Start</button>" + "</div>";
+		            }
+		    }
+		    else if(server_data[0].server_status == "on" && server_data[1].server_status == "on")
+		    {
+		            for (i in server_data) {
+		                server_str += "<tr>" +
+		                "<td>" + server_data[i].server_name + "</td>" +
+		                "<td>" + server_data[i].server_status + "</td>" +
+		                "<td>" + server_data[i].ip + "</td>" +
+		                "</tr>";
+				img_str +="<div class='server_block'>" + 
+				"<img src='pictures/server.png' id=\'img" + i + "\'/>" + 
+				"<p>" + server_data[i].server_name + "</p>";
+		                img_str += "<button class=\" btn btn-lg btn-primary btn-block \" onclick=\" change(\'" + "stop" + "\',\'" + server_data[i].ip + "\',\'" + server_data[i].username + "\',\'" + server_data[i].password + "\',\'" + "img" + i + "\')\" >Stop</button>" + "</div>";
+		            }
+		    }
+		    else{
+			    for (i in server_data) {
+		                server_str += "<tr>" +
+		                "<td>" + server_data[i].server_name + "</td>" +
+		                "<td>" + server_data[i].server_status + "</td>" +
+		                "<td>" + server_data[i].ip + "</td>" +
+		                "</tr>";
+				img_str +="<div class='server_block'>" + 
+				"<img src='pictures/server.png' id=\'img" + i + "\'/>" + 
+				"<p>" + server_data[i].server_name + "</p>";
+		                if(server_data[i].server_status == "on")
+				    img_str += "<button class=\" btn btn-lg btn-primary btn-block \" onclick=\" change(\'" + "stop" + "\',\'" + server_data[i].ip + "\',\'" + server_data[i].username + "\',\'" + server_data[i].password + "\',\'" + "img" + i + "\')\" >Stop</button>" + "</div>";
+				else
+				    img_str += "<button class=\" btn btn-lg btn-primary btn-block \" onclick=\" change(\'" + "immigration" + "\',\'" + server_data[i].ip + "\',\'" + server_data[i].username + "\',\'" + server_data[i].password + "\',\'" + "img" + i + "\')\" >Immigration</button>" + "</div>";
+                             }
+                    }
+                    
+                    server_tbody.innerHTML = server_str;
+		    server_div.innerHTML = img_str;
             },
             error: function () {
                 alert("查询失败")
             }
           }) //ajax
         }
-	fresh_page();
+	//fresh_page();
       </script>
-    </div>
+
+      <script type="text/javascript">
+        function change(command, ip, username, password, img_id){
+	  var img = document.getElementById(img_id);
+          $.ajax({
+            type: "post",
+            dataType: "json",
+            url: command + ".php",
+            data: {
+                ip: ip,
+                username: username,
+		password: password
+            },
+	    beforeSend: function () {
+                document.getElementById(img_id).src='pictures/loading.gif';
+		clearInterval(timer);
+		//img.innerHTML = "<img src='pictures/loading.gif' />";
+    	    },
+            success: function (msg) {
+		var param = msg.responseText;
+		if(param == "ok"){
+		    alert("ok");
+                }
+            },
+            error: function (msg) {
+		var param = msg.responseText;
+		console.log(param);
+                alert(param);
+            },
+	    complete: function(){
+		timer = window.setInterval(fresh_page,5000);
+                fresh_page();
+            }
+          }) //ajax
+        }
+      </script>
 </html>
 

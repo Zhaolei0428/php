@@ -22,16 +22,42 @@ if(! $retval )
 $i = 0;
 while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 {
-         $arr = array(
+         $arr1 = array(
              "username"=>$row['username'],
              "password"=>$row['password'],
              "server"=>$row['server'],
              "video_process"=>$row['video_process']
          );
-         $data[$i] = $arr;
+         $user_data[$i] = $arr1;
          $i = $i + 1;
 }
-        mysqli_close($conn);
+ 
+$sql = 'SELECT * from server_info';
+ 
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('无法读取数据: ' . mysqli_error($conn));
+}
+
+$i = 0;
+while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
+{
+         $arr2 = array(
+             "server_name"=>$row['server_name'],
+             "server_status"=>$row['server_status'],
+             "ip"=>$row['ip'],
+	     "username"=>$row['username'],
+	     "password"=>$row['password']
+         );
+         $server_data[$i] = $arr2;
+         $i = $i + 1;
+}
+     mysqli_close($conn);
+$data = array(
+             "server_data"=>$server_data,
+	     "user_data"=>$user_data
+);
 echo json_encode($data);
 ?>
 
